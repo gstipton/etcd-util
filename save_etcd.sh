@@ -8,11 +8,10 @@ if [ $# -ne 3 ]
 fi
 
 ETCD_URL=$1
-echo "ETCD_URL $ETCD_URL" 
 KEY=$2
 FILE_OUT=$3
 
-LINES="$(curl $ETCD_URL/v2/keys/$KEY | python -m json.tool | grep value | sed 's/ //g' | cut -d ':' -f2-13 | sed 's/\\//g')"
+LINES="$(curl $ETCD_URL/v2/keys/$KEY | python -m json.tool | grep value | sed 's/ //g' | cut -d ':' -f2-13 | sed 's/\\//g' | sed 's/^.\(.*\).$/\1/')"
 for i in $LINES; do
     $(echo $i >> $FILE_OUT)
 done
